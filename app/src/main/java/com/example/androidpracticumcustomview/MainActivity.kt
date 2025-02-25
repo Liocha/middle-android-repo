@@ -18,25 +18,36 @@ class MainActivity : ComponentActivity() {
         /*
         Раскомментируйте нужный вариант
          */
-        startXmlPracticum() // «традиционный» android (XML)
-//          setContent { // Jetpack Compose
-//             MainScreen()
+        //startXmlPracticum() // «традиционный» android (XML)
+        setContent { // Jetpack Compose
+            MainScreen()
+        }
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun startXmlPracticum() {
         val customContainer = CustomContainer(this)
+        customContainer.apply {
+            setBackgroundColor(getColor(android.R.color.holo_green_light))
+        }
         setContentView(customContainer)
 
         val firstView = TextView(this).apply {
-            // TODO
-            // ...
+            setText("First View ")
+            textSize = 25f
+            setTextColor(getColor(android.R.color.holo_red_light))
+            setBackgroundColor(getColor(android.R.color.holo_blue_light))
         }
+
+        customContainer.addView(firstView)
 
         val secondView = TextView(this).apply {
-            // TODO
-            // ...
-        }
+            text = "Second View"
+            textSize = 50f
+            setTextColor(getColor(android.R.color.black))
+            setBackgroundColor(getColor(android.R.color.holo_purple))
 
+        }
         // Добавление второго элемента через некоторое время
         Handler(Looper.getMainLooper()).postDelayed({
             customContainer.addView(secondView)
