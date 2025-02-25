@@ -1,11 +1,14 @@
 package com.example.androidpracticumcustomview
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import com.example.androidpracticumcustomview.ui.theme.CustomContainer
+import com.example.androidpracticumcustomview.ui.theme.MainScreen
 
 /*
 Задание:
