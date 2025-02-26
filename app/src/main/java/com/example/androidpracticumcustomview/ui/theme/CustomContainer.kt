@@ -1,5 +1,7 @@
 package com.example.androidpracticumcustomview.ui.theme
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -62,12 +64,17 @@ class CustomContainer @JvmOverloads constructor(
                 val animationOffset = (top - childTop).toFloat()
                 alpha = 0f
                 firstChildIsAnimate = true
-                animate()
-                    .alpha(1f)
-                    .setDuration(ALPHA_DURATION)
-                animate()
-                    .translationYBy(animationOffset)
-                    .setDuration(TRANSITION_DURATION)
+
+                val alphaAnimator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
+                alphaAnimator.duration = FADE_DURATION.toLong()
+
+                val translationYAnimator =
+                    ObjectAnimator.ofFloat(this, "translationY", 0f, animationOffset)
+                translationYAnimator.duration = ANIMATION_DURATION.toLong()
+
+                val animatorSet = AnimatorSet()
+                animatorSet.playTogether(alphaAnimator, translationYAnimator)
+                animatorSet.start()
             }
         }
 
@@ -83,25 +90,28 @@ class CustomContainer @JvmOverloads constructor(
             val animationOffset = (bottom - childBottom).toFloat()
             alpha = 0f
             firstChildIsAnimate = true
-            animate()
-                .alpha(1f)
-                .setDuration(ALPHA_DURATION)
-            animate()
-                .translationYBy(animationOffset)
-                .setDuration(TRANSITION_DURATION)
+
+            val alphaAnimator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
+            alphaAnimator.duration = FADE_DURATION.toLong()
+
+            val translationYAnimator =
+                ObjectAnimator.ofFloat(this, "translationY", 0f, animationOffset)
+            translationYAnimator.duration = ANIMATION_DURATION.toLong()
+
+            val animatorSet = AnimatorSet()
+            animatorSet.playTogether(alphaAnimator, translationYAnimator)
+            animatorSet.start()
         }
     }
 
     override fun addView(child: View) {
         if (childCount >= MAX_CHILD_VIEWS) {
-            throw IllegalStateException()
+            throw IllegalStateException("Cannot add more than $MAX_CHILD_VIEWS child views. Current count: $childCount.")
         }
         super.addView(child)
     }
 
     companion object {
         const val MAX_CHILD_VIEWS = 2
-        const val ALPHA_DURATION = 2000L
-        const val TRANSITION_DURATION = 5000L
     }
 }

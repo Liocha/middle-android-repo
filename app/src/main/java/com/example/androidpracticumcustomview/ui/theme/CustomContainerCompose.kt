@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -30,19 +33,19 @@ fun CustomContainerCompose(
     firstChild: @Composable (() -> Unit)?,
     secondChild: @Composable (() -> Unit)?
 ) {
-    // Блок создания и инициализации переменных
+    if (firstChild == null && secondChild == null) {
+        return
+    }
+
     val alpha = remember { Animatable(0f) }
 
     val firstChildOffsetY = remember { Animatable(0f) }
-    var firstChildTargetValue = 0f
+    var firstChildTargetValue by remember { mutableFloatStateOf(0f) }
 
     val secondChildOffsetY = remember { Animatable(0f) }
-    var secondChildTargetValue = 0f
+    var secondChildTargetValue by remember { mutableFloatStateOf(0f) }
 
     val density = LocalDensity.current.density
-
-    val animationDuration = 5000
-    val fadeDuration = 2000
 
     // Блок активации анимации при первом запуске
     LaunchedEffect(Unit) {
@@ -50,20 +53,20 @@ fun CustomContainerCompose(
         launch {
             firstChildOffsetY.animateTo(
                 targetValue = -(firstChildTargetValue / density),
-                animationSpec = tween(animationDuration)
+                animationSpec = tween(ANIMATION_DURATION)
             )
         }
 
         launch {
             secondChildOffsetY.animateTo(
                 targetValue = (secondChildTargetValue / density),
-                animationSpec = tween(animationDuration)
+                animationSpec = tween(ANIMATION_DURATION)
             )
         }
         launch {
             alpha.animateTo(
                 targetValue = 1f,
-                animationSpec = tween(fadeDuration)
+                animationSpec = tween(FADE_DURATION)
             )
         }
 

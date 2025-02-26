@@ -1,14 +1,20 @@
 package com.example.androidpracticumcustomview
 
-import android.annotation.SuppressLint
+
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.androidpracticumcustomview.ui.theme.CustomContainer
-import com.example.androidpracticumcustomview.ui.theme.MainScreen
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 /*
 Задание:
@@ -18,42 +24,39 @@ import com.example.androidpracticumcustomview.ui.theme.MainScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*
-        Раскомментируйте нужный вариант
-         */
-        //startXmlPracticum() // «традиционный» android (XML)
-        setContent { // Jetpack Compose
-            MainScreen()
+
+        setContent {
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Button(onClick = { navigateToComposeScreen() }) {
+                    Text(text = "COMPOSE CONTAINER")
+                }
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Button(onClick = { navigateToViewGroupScreen() }) {
+                    Text(text = "VIEWGROUP CONTAINER")
+                }
+            }
         }
     }
 
-    @SuppressLint("ResourceAsColor")
-    private fun startXmlPracticum() {
-        val customContainer = CustomContainer(this)
-        customContainer.apply {
-            setBackgroundColor(getColor(android.R.color.holo_green_light))
-        }
-        setContentView(customContainer)
+    private fun navigateToComposeScreen() {
+        val intent = Intent(
+            this, ComposeActivity::class.java
+        )
+        startActivity(intent)
+    }
 
-        val firstView = TextView(this).apply {
-            setText("First View ")
-            textSize = 25f
-            setTextColor(getColor(android.R.color.holo_red_light))
-            setBackgroundColor(getColor(android.R.color.holo_blue_light))
-        }
-
-        customContainer.addView(firstView)
-
-        val secondView = TextView(this).apply {
-            text = "Second View"
-            textSize = 50f
-            setTextColor(getColor(android.R.color.black))
-            setBackgroundColor(getColor(android.R.color.holo_purple))
-
-        }
-        // Добавление второго элемента через некоторое время
-        Handler(Looper.getMainLooper()).postDelayed({
-            customContainer.addView(secondView)
-        }, 2000)
+    private fun navigateToViewGroupScreen() {
+        val intent = Intent(
+            this, ViewGroupActivity::class.java
+        )
+        startActivity(intent)
     }
 }
